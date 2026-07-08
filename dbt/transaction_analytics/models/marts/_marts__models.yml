@@ -1,0 +1,86 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: >
+      Customer dimension: one row per customer, enriched with lifetime
+      transaction and support-ticket activity.
+    columns:
+      - name: customer_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: region
+        tests:
+          - not_null
+      - name: account_type
+        tests:
+          - not_null
+      - name: lifetime_txn_count
+        description: Total number of transactions the customer has made.
+        tests:
+          - not_null
+
+  - name: fct_transactions
+    description: >
+      Transaction fact table, grain of one row per transaction. Denormalizes
+      customer region/account_type/risk_segment for convenient slicing.
+    columns:
+      - name: transaction_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Foreign key to dim_customers.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+      - name: amount
+        tests:
+          - not_null
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['completed', 'declined', 'pending', 'reversed']
+
+  - name: mart_daily_kpis
+    description: >
+      Daily transaction KPIs grouped by region and channel: volume, dollar
+      amount, completion/decline counts, active customers. Primary input to
+      the Python anomaly detection step.
+    columns:
+      - name: transaction_date
+        tests:
+          - not_null
+      - name: region
+        tests:
+          - not_null
+      - name: channel
+        tests:
+          - not_null
+      - name: txn_count
+        description: Number of transactions for this date/region/channel.
+        tests:
+          - not_null
+
+  - name: mart_support_ticket_themes
+    description: >
+      Daily support ticket volume by category label. Complements the
+      unsupervised NLP theme clustering produced by python/nlp/analyze_tickets.py.
+    columns:
+      - name: created_date
+        tests:
+          - not_null
+      - name: category
+        tests:
+          - not_null
+      - name: ticket_count
+        tests:
+          - not_null

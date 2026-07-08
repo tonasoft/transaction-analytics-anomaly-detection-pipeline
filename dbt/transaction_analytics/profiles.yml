@@ -1,0 +1,16 @@
+# Local dev profile targeting DuckDB, which stands in for a Snowflake
+# warehouse in this project (see README "Porting to Snowflake" for the
+# production equivalent of this file).
+#
+# No secrets live here -- DuckDB is just a local file -- so it's safe to
+# commit, unlike a real profiles.yml with warehouse credentials.
+#
+# Invoke dbt from this directory with: dbt run --profiles-dir .
+
+transaction_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: '../../warehouse/transaction_analytics.duckdb'
+      threads: 4

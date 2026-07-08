@@ -1,0 +1,29 @@
+name: 'transaction_analytics'
+version: '1.0.0'
+config-version: 2
+
+# Matches the profile name in profiles.yml. In production this profile would
+# point at a Snowflake account instead of a local DuckDB file -- see the
+# README section "Porting to Snowflake" for the exact swap.
+profile: 'transaction_analytics'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  transaction_analytics:
+    staging:
+      +materialized: view
+      +schema: staging
+    marts:
+      +materialized: table
+      +schema: marts

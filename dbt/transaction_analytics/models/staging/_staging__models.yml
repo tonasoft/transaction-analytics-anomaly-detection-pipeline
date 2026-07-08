@@ -1,0 +1,93 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: One row per customer, typed and cleaned from raw.customers.
+    columns:
+      - name: customer_id
+        description: Primary key. Format CUSTNNNNNN.
+        tests:
+          - unique
+          - not_null
+      - name: signup_date
+        description: Date the customer's account was opened.
+        tests:
+          - not_null
+      - name: region
+        description: Customer's home region (Northeast, Midwest, South, West, International).
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Northeast', 'Midwest', 'South', 'West', 'International']
+      - name: account_type
+        description: Account tier (Basic, Premium, Business).
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Basic', 'Premium', 'Business']
+      - name: risk_segment
+        description: Fraud/credit risk bucket assigned to the customer.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Low', 'Medium', 'High']
+
+  - name: stg_transactions
+    description: One row per transaction, typed and cleaned from raw.transactions.
+    columns:
+      - name: transaction_id
+        description: Primary key. Format TXNNNNNNNNN.
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Foreign key to stg_customers.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+      - name: transaction_ts
+        description: Timestamp the transaction was initiated.
+        tests:
+          - not_null
+      - name: amount
+        description: Transaction amount in USD.
+        tests:
+          - not_null
+      - name: status
+        description: Terminal status of the transaction.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['completed', 'declined', 'pending', 'reversed']
+
+  - name: stg_support_tickets
+    description: One row per support ticket, typed and cleaned from raw.support_tickets.
+    columns:
+      - name: ticket_id
+        description: Primary key. Format TCKTNNNNN.
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Foreign key to stg_customers.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+      - name: created_at
+        description: Timestamp the ticket was opened.
+        tests:
+          - not_null
+      - name: category
+        description: Ticket category tag assigned at creation time.
+        tests:
+          - not_null

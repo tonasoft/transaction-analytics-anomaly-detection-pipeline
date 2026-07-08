@@ -1,0 +1,9 @@
+cluster_id,theme_label,top_terms,ticket_count,avg_sentiment,dominant_category,category_purity_pct,trend_slope_per_week,trend
+1,failed / declined / transaction / payment,"failed, declined, transaction, payment, pending, need, payment failed, funds pending",558,-0.775,failed_transaction,100.0,-0.0,stable
+3,fee / charged / monthly / overdraft,"fee, charged, monthly, overdraft, overdraft fee, fee going, maintenance, maintenance fee",445,-0.359,fee_complaint,100.0,-0.006,stable
+5,reset / log / password / days frustrating,"reset, log, password, days frustrating, frustrating, happening, manually, access account",426,-0.23,login_issue,100.0,0.003,stable
+0,app / really / service week / great,"app, really, service week, great, just wanted, wanted, thank, week",409,0.942,positive_feedback,100.0,-0.004,stable
+2,twice / support / issue / response,"twice, support, issue, response, ticket, ve, hold, disconnected resolving",336,0.515,slow_support,100.0,-0.002,stable
+4,card / charges / card compromised / compromised,"card, charges, card compromised, compromised, unauthorized, fraud, did, freeze account",262,-0.243,fraud_report,100.0,-0.004,stable
+6,need / account / review / frozen,"need, account, review, frozen, account frozen, check, long routine, routine check",257,0.247,account_access,100.0,0.007,stable
+7,question / accounts / statement / address,"question, accounts, statement, address, download, download statement, processed, just quick",231,0.368,general_inquiry,100.0,-0.007,stable
